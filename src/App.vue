@@ -1,7 +1,14 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <quiz-card></quiz-card>
+  <div class="antialiased">
+    <div class="p-16">
+      <quiz-card
+        :heading="heading"
+        :question="quesiton"
+        :choices="choices"
+        :index="3"
+        :total="10"
+      ></quiz-card>
+    </div>
   </div>
 </template>
 
@@ -13,16 +20,14 @@ export default {
   components: {
     QuizCard,
   },
+  data() {
+    return {
+      heading: "Determine the answer",
+      question: "What is your favorite color?",
+      choices: ["Green", "Orange", "Yellow", "Blue"],
+    };
+  },
 };
 </script>
 
-<style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
