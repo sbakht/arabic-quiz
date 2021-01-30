@@ -4,7 +4,7 @@ function getRandomIntInclusive(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min); //The maximum is inclusive and the minimum is inclusive
 }
 
-function getRandom({count = 1, duplicates = false, min, max}) {
+function getRandom({count = 1, duplicates = false, min = 0, max}) {
   const result = [];
   while(count > 0) {
     const random = getRandomIntInclusive(min, max);
@@ -18,4 +18,11 @@ function getRandom({count = 1, duplicates = false, min, max}) {
     }
   }
   return result;
+}
+
+function getRandomChoices({choices, count}) {
+  const randoms = getRandom({count, max: choices.length - 1});
+  return randoms.map(random => {
+    return choices[random]
+  })
 }
