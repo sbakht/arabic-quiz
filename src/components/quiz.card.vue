@@ -29,11 +29,19 @@
 <script>
 export default {
   props: ["heading", "question", "choices", "index", "total", "answerId"],
+  data() {
+    return {
+      answeredCorrectly: false,
+    };
+  },
   methods: {
     onAnswer(choice) {
       this.$emit("answer", choice);
       if (this.isRight(choice)) {
-        this.$emit("right", choice);
+        if (!this.answeredCorrectly) {
+          this.$emit("right", choice);
+          this.answeredCorrectly = true;
+        }
       } else {
         this.$emit("wrong", choice);
       }

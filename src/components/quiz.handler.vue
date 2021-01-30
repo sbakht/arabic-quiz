@@ -56,7 +56,7 @@ export default {
         this.questions = this.questions.concat(generateArToEn({ count: 1 }));
 
         // }
-      }, 500);
+      }, 200);
     },
   },
 };
