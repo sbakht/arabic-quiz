@@ -22,7 +22,7 @@ export default {
   data() {
     return {
       heading: "Determine the answer",
-      questions: generateArToEn({ count: 1 }),
+      questions: this.generate(),
       index: 0,
       history: [],
     };
@@ -36,6 +36,9 @@ export default {
     },
   },
   methods: {
+    generate() {
+      return generateArToEn({ count: 10 });
+    },
     onAnswer(choice) {
       this.history.push({
         question: this.question,
@@ -47,16 +50,16 @@ export default {
     onWrong(choice) {
       console.log("wrong");
     },
-    onRight(choice) {
+    onRight({ choice, timeout }) {
       setTimeout(() => {
         // if (this.index < this.total) {
         //   this.index++;
         // }else{
         this.index++;
-        this.questions = this.questions.concat(generateArToEn({ count: 1 }));
+        // this.questions = this.questions.concat(this.generate());
 
         // }
-      }, 200);
+      }, timeout);
     },
   },
 };

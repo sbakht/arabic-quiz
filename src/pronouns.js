@@ -129,18 +129,34 @@ export const allChoicesEn = [
   },
 ]
 
+function preventConsecutiveDuplicate(lastQuestion, genFn) {
+  while(true) {
+    const question = genFn();
+    if(!lastQuestion || question.question.id !== lastQuestion.question.id) {
+      return question;
+    }
+  }
+}
+
+function last(arr) {
+  if(arr.length === 0) {
+    return null;
+  }
+  return arr[arr.length - 1];
+}
 
 export const generateArToEn = ({count, numChoices= 'ALL'}) => {
   const result = [];
   for(let i = 0; i < count; i++) {
-    const question = getRandomElem(ar);
-    const answer = question.id;
-    const obj = {
-      question,
-      answer,
-      choices: numChoices === 'ALL' ? allChoicesEn : getRandomChoices({choices: en, count: numChoices, answer})
-    }
-    result.push(obj)
+    result.push(preventConsecutiveDuplicate(last(result), () => {
+      const question = getRandomElem(ar);
+      const answer = question.id;
+      return {
+        question,
+        answer,
+        choices: numChoices === 'ALL' ? allChoicesEn : getRandomChoices({choices: allChoicesEn, count: numChoices, answer})
+      }
+    }));
   }
   return result;
 }
