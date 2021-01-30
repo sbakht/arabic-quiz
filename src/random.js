@@ -20,7 +20,7 @@ function getRandom({count = 1, duplicates = false, min = 0, max}) {
   return result;
 }
 
-function getRandomChoices({choices, count}) {
+export const getRandomChoices = (choices, count) => {
   const randoms = getRandom({count, max: choices.length - 1});
   return randoms.map(random => {
     return choices[random]

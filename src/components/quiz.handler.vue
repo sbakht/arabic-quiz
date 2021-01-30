@@ -2,7 +2,7 @@
   <quiz-card
     :heading="heading"
     :question="question"
-    :choices="choices"
+    :choices="randomChoices"
     :answerId="answer"
     :index="index"
     :total="total"
@@ -14,6 +14,7 @@
 
 <script>
 import QuizCard from "./quiz.card.vue";
+import { getRandomChoices } from "../random";
 
 export default {
   components: {
@@ -34,6 +35,11 @@ export default {
       total: 10,
       history: [],
     };
+  },
+  computed: {
+    randomChoices() {
+      return getRandomChoices(this.choices, 3);
+    },
   },
   methods: {
     onAnswer(choice) {
