@@ -2,7 +2,8 @@
   <div class="p-6">
     <div class="flex justify-between">
       <p class="text-gray-600">{{ heading }}</p>
-      <p class="text-gray-600">{{ index }}/{{ total }}</p>
+      <p class="text-gray-600" v-if="total">{{ index }}/{{ total }}</p>
+      <p class="text-gray-600" v-else>{{ index }}</p>
     </div>
     <h3 class="text-3xl leading-6 font-medium text-gray-900 text-center mt-8">
       {{ question }}

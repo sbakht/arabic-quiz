@@ -1,11 +1,10 @@
 <template>
   <quiz-card
     :heading="heading"
-    :question="question"
-    :choices="randomChoices"
-    :answerId="answer"
-    :index="index"
-    :total="total"
+    :question="question.question.text"
+    :choices="question.choices"
+    :answerId="question.answer"
+    :index="index + 1"
     @answer="onAnswer"
     @wrong="onWrong"
     @right="onRight"
@@ -14,7 +13,7 @@
 
 <script>
 import QuizCard from "./quiz.card.vue";
-import { getRandomChoices } from "../random";
+import { generateArToEn } from "../pronouns";
 
 export default {
   components: {
@@ -23,22 +22,17 @@ export default {
   data() {
     return {
       heading: "Determine the answer",
-      question: "What is your favorite color?",
-      choices: [
-        { id: 1, text: "Green" },
-        { id: 2, text: "Yellow" },
-        { id: 3, text: "Orange" },
-        { id: 4, text: "Blue" },
-      ],
-      answer: 1,
-      index: 1,
-      total: 10,
+      questions: generateArToEn({ count: 1 }),
+      index: 0,
       history: [],
     };
   },
   computed: {
-    randomChoices() {
-      return getRandomChoices(this.choices, 3);
+    question() {
+      return this.questions[this.index];
+    },
+    total() {
+      return this.questions.length;
     },
   },
   methods: {
@@ -55,10 +49,13 @@ export default {
     },
     onRight(choice) {
       setTimeout(() => {
-        if (this.index < this.total) {
-          this.index++;
-          this.answer = (this.answer % 4) + 1;
-        }
+        // if (this.index < this.total) {
+        //   this.index++;
+        // }else{
+        this.index++;
+        this.questions = this.questions.concat(generateArToEn({ count: 1 }));
+
+        // }
       }, 500);
     },
   },
