@@ -10,10 +10,25 @@
     </h3>
     <div
       class="grid grid-cols-1 gap-4 mt-12"
-      :class="{ 'grid-cols-2': choices.length >= 6 }"
+      :class="{ 'md:grid-cols-2': choices.length >= 6 }"
     >
       <div
-        class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+        class="
+          relative
+          rounded-lg
+          border border-gray-300
+          bg-white
+          px-6
+          py-5
+          shadow-sm
+          flex
+          items-center
+          space-x-3
+          hover:border-gray-400
+          focus-within:ring-2
+          focus-within:ring-offset-2
+          focus-within:ring-indigo-500
+        "
         v-for="(choice, i) in choices"
         :key="choice.id"
       >
