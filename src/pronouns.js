@@ -1,53 +1,53 @@
-import {getRandomChoices, getRandomElem} from './random';
+import { getRandomChoices, getRandomElem } from './random';
 
 export const ar = [
   {
     id: 1,
-    text: 'huwa',
+    text: 'هُو',
   },
   {
     id: 2,
-    text: 'humaa',
+    text: 'هُمَا',
   },
   {
     id: 3,
-    text: 'hom',
+    text: 'هُمْ',
   },
   {
     id: 4,
-    text: 'heya',
+    text: 'هِي',
   },
   {
     id: 5,
-    text: 'hunna'
+    text: 'هُنَّ'
   },
   {
     id: 6,
-    text: 'anta'
+    text: 'اَنْتَ'
   },
   {
     id: 7,
-    text: 'antomaa'
+    text: 'اَنْتُمَا'
   },
   {
     id: 8,
-    text: 'antum'
+    text: 'اَنْتُمْ'
   },
   {
     id: 9,
-    text: 'anti'
+    text: 'اَنْتِ'
   },
   {
-    id: 10, 
-    text: 'antounna'
+    id: 10,
+    text: 'اَنْتُنَّ'
   },
   {
     id: 11,
-    text: 'ana'
+    text: 'أنَا'
   },
   {
     id: 12,
-    text: 'nahnu'
+    text: 'نَحْنُ'
   },
 ]
 
@@ -130,31 +130,31 @@ export const allChoicesEn = [
 ]
 
 function preventConsecutiveDuplicate(lastQuestion, genFn) {
-  while(true) {
+  while (true) {
     const question = genFn();
-    if(!lastQuestion || question.question.id !== lastQuestion.question.id) {
+    if (!lastQuestion || question.question.id !== lastQuestion.question.id) {
       return question;
     }
   }
 }
 
 function last(arr) {
-  if(arr.length === 0) {
+  if (arr.length === 0) {
     return null;
   }
   return arr[arr.length - 1];
 }
 
-export const generateArToEn = ({count, numChoices= 'ALL'}) => {
+export const generateArToEn = ({ count, numChoices = 'ALL' }) => {
   const result = [];
-  for(let i = 0; i < count; i++) {
+  for (let i = 0; i < count; i++) {
     result.push(preventConsecutiveDuplicate(last(result), () => {
       const question = getRandomElem(ar);
       const answer = question.id;
       return {
         question,
         answer,
-        choices: numChoices === 'ALL' ? allChoicesEn : getRandomChoices({choices: allChoicesEn, count: numChoices, answer})
+        choices: numChoices === 'ALL' ? allChoicesEn : getRandomChoices({ choices: allChoicesEn, count: numChoices, answer })
       }
     }));
   }
