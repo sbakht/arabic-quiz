@@ -7,6 +7,8 @@
     :answerId="question.answer"
     :total="!generateNextQuestion && questions.length"
     :index="questionNumber"
+    :numRight="numRight"
+    :numWrong="numWrong"
     @answer="onAnswer"
     @wrong="onWrong"
     @right="onRight"
@@ -30,6 +32,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    correctAnswerRequired: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     const index = 0;
@@ -41,6 +47,9 @@ export default {
       history: [],
       completed: false,
       questionNumber: 1,
+      numRight: 0,
+      numWrong: 0,
+      isIncorrectState: false,
     };
   },
   computed: {
@@ -73,9 +82,17 @@ export default {
     },
     onWrong(choice) {
       console.log("wrong");
+      this.numWrong += this.isIncorrectState ? 0 : 1;
+      this.isIncorrectState = true;
+      if (this.correctAnswerRequired === false) {
+        this.isIncorrectState = false;
+        this.goToNextQuestion();
+      }
     },
     onRight({ choice, timeout }) {
       setTimeout(() => {
+        this.numRight += this.isIncorrectState ? 0 : 1;
+        this.isIncorrectState = false;
         this.goToNextQuestion();
       }, timeout);
     },

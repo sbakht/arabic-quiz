@@ -4,6 +4,14 @@
       <p class="text-gray-600">{{ heading }}</p>
       <p class="text-gray-600" v-if="total">{{ index }}/{{ total }}</p>
       <p class="text-gray-600" v-else>{{ index }}</p>
+      <div class="flex flex-col items-end">
+        <p class="text-green-600">
+          Correct: <span class="font-bold">{{ numRight }}</span>
+        </p>
+        <p class="text-red-600">
+          Incorrect: <span class="font-bold">{{ numWrong }}</span>
+        </p>
+      </div>
     </div>
     <h3 class="text-3xl leading-6 font-medium text-gray-900 text-center mt-8">
       {{ question }}
@@ -46,7 +54,16 @@
 
 <script>
 export default {
-  props: ["heading", "question", "choices", "index", "total", "answerId"],
+  props: [
+    "heading",
+    "question",
+    "choices",
+    "index",
+    "total",
+    "answerId",
+    "numRight",
+    "numWrong",
+  ],
   data() {
     return {
       answeredCorrectly: false,

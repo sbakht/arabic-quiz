@@ -7,6 +7,7 @@
     <VueMultipleChoice
       :questions="questions"
       :heading="heading"
+      :correctAnswerRequired="false"
     ></VueMultipleChoice>
   </div>
 </template>
