@@ -1,5 +1,5 @@
 <template>
-  <VueMultipleChoice :generateNextQuestion="null"></VueMultipleChoice>
+  <VueMultipleChoice :generateNextQuestion="buildQuestion"></VueMultipleChoice>
 </template>
 
 <script>

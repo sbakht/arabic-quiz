@@ -5,6 +5,7 @@
     :question="question.question.text"
     :choices="question.choices"
     :answerId="question.answer"
+    :total="!generateNextQuestion && questions.length"
     :index="index + 1"
     @answer="onAnswer"
     @wrong="onWrong"
@@ -48,7 +49,7 @@ export default {
   },
   methods: {
     generate() {
-      return generateArToEn({ count: 3 });
+      return generateArToEn({ count: 2 });
     },
     onAnswer(choice) {
       this.history.push({
