@@ -1,12 +1,12 @@
 <template>
   <quiz-card
     v-if="question && !completed"
-    :heading="heading"
+    v-bind="$attrs"
     :question="question.question.text"
     :choices="question.choices"
     :answerId="question.answer"
     :total="!generateNextQuestion && questions.length"
-    :index="index + 1"
+    :index="questionNumber"
     @answer="onAnswer"
     @wrong="onWrong"
     @right="onRight"
@@ -16,7 +16,6 @@
 
 <script>
 import QuizCard from "./quiz.card.vue";
-import { generateArToEn } from "../pronouns";
 
 export default {
   components: {
@@ -27,19 +26,21 @@ export default {
       type: Function,
       default: null,
     },
+    questions: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
-    const questions = this.generate();
     const index = 0;
     return {
-      heading: "Determine the answer",
-      questions,
       question: this.generateNextQuestion
         ? this.generateNextQuestion({})
-        : questions[index],
+        : this.questions[index],
       index,
       history: [],
       completed: false,
+      questionNumber: 1,
     };
   },
   computed: {
@@ -48,8 +49,19 @@ export default {
     },
   },
   methods: {
-    generate() {
-      return generateArToEn({ count: 2 });
+    goToNextQuestion() {
+      if (this.generateNextQuestion) {
+        this.question = this.generateNextQuestion({});
+      } else {
+        this.index++;
+        if (this.index >= this.questions.length) {
+          this.completed = true;
+          this.question = null;
+        } else {
+          this.question = this.questions[this.index];
+        }
+      }
+      this.questionNumber++;
     },
     onAnswer(choice) {
       this.history.push({
@@ -64,24 +76,7 @@ export default {
     },
     onRight({ choice, timeout }) {
       setTimeout(() => {
-        // if (this.index < this.total) {
-        //   this.index++;
-        // }else{
-        this.index++;
-        // this.questions = this.questions.concat(this.generate());
-
-        // }
-
-        if (this.generateNextQuestion) {
-          this.question = this.generateNextQuestion({});
-        } else {
-          if (this.index >= this.questions.length) {
-            this.completed = true;
-            this.question = null;
-          } else {
-            this.question = this.questions[this.index];
-          }
-        }
+        this.goToNextQuestion();
       }, timeout);
     },
   },

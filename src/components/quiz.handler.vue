@@ -1,5 +1,14 @@
 <template>
-  <VueMultipleChoice :generateNextQuestion="buildQuestion"></VueMultipleChoice>
+  <div>
+    <VueMultipleChoice
+      :generateNextQuestion="buildQuestion"
+      :heading="heading"
+    ></VueMultipleChoice>
+    <VueMultipleChoice
+      :questions="questions"
+      :heading="heading"
+    ></VueMultipleChoice>
+  </div>
 </template>
 
 <script>
