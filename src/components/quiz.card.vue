@@ -1,10 +1,12 @@
 <template>
   <div class="p-6">
-    <div class="flex justify-between">
+    <div class="flex justify-between items-center">
       <p class="text-gray-600">{{ heading }}</p>
-      <p class="text-gray-600" v-if="total">{{ index }}/{{ total }}</p>
-      <p class="text-gray-600" v-else>{{ index }}</p>
       <div class="flex flex-col items-end">
+        <p class="text-gray-600 font-bold" v-if="total">
+          {{ index }}/{{ total }}
+        </p>
+        <p class="text-gray-600 font-bold" v-else># {{ index }}</p>
         <p class="text-green-600">
           Correct: <span class="font-bold">{{ numRight }}</span>
         </p>
