@@ -1,36 +1,27 @@
 <template>
-  <quiz-card
-    :heading="heading"
-    :question="question.question.text"
-    :choices="question.choices"
-    :answerId="question.answer"
-    :index="index + 1"
-    @answer="onAnswer"
-    @wrong="onWrong"
-    @right="onRight"
-  ></quiz-card>
+  <VueMultipleChoice :generateNextQuestion="null"></VueMultipleChoice>
 </template>
 
 <script>
 import QuizCard from "./quiz.card.vue";
 import { generateArToEn } from "../pronouns";
+import VueMultipleChoice from "./vue-multiple-choice.vue";
 
 export default {
   components: {
     QuizCard,
+    VueMultipleChoice,
   },
   data() {
     return {
       heading: "Determine the answer",
       questions: this.generate(),
+      question: this.buildQuestion({}),
       index: 0,
       history: [],
     };
   },
   computed: {
-    question() {
-      return this.questions[this.index];
-    },
     total() {
       return this.questions.length;
     },
@@ -59,7 +50,12 @@ export default {
         // this.questions = this.questions.concat(this.generate());
 
         // }
+        this.question = this.buildQuestion({});
       }, timeout);
+    },
+    buildQuestion({ index }) {
+      const nextQuestion = generateArToEn({ count: 1 });
+      return nextQuestion[0];
     },
   },
 };
