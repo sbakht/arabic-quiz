@@ -26,9 +26,9 @@
 import QuizCard from "./quiz.card.vue";
 
 const MODES = {
-  Navigate: 1,
-  SingleTry: 2,
-  ForceRight: 3,
+  Navigate: "Navigate",
+  SingleTry: "SingleTry",
+  ForceRight: "ForceRight",
 };
 
 export default {
@@ -44,10 +44,6 @@ export default {
     questions: {
       type: Array,
       default: () => [],
-    },
-    correctAnswerRequired: {
-      type: Boolean,
-      default: true,
     },
     isSkippable: {
       type: Boolean,
@@ -102,7 +98,7 @@ export default {
     },
     numRight() {
       return this.history.filter((q) => {
-        if (this.correctAnswerRequired) {
+        if (this.isModeForceRight) {
           return (
             q.userAnswers.filter((userAnswer) => !userAnswer.correct).length ===
             0
@@ -112,7 +108,7 @@ export default {
     },
     numWrong() {
       return this.history.filter((q) => {
-        if (this.correctAnswerRequired) {
+        if (this.isModeForceRight) {
           return (
             q.userAnswers.filter((userAnswer) => !userAnswer.correct).length > 0
           );
@@ -168,7 +164,7 @@ export default {
       this.history[this.index] = { ...currQ, right: false, wrong: true };
       this.history = [...this.history];
 
-      if (this.correctAnswerRequired === false) {
+      if (this.isModeForceRight === false) {
         this.goToNextQuestion();
       }
     },
