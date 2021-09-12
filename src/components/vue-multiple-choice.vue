@@ -12,6 +12,7 @@
       :numWrong="numWrong"
       :showScore="showScore"
       :selected="chosenAnswer.id"
+      :canNavigate="isModeNavigate"
       @answer="onAnswer"
       @wrong="onWrong"
       @right="onRight"
@@ -110,7 +111,6 @@ export default {
         }
 
         if (this.isModeNavigate) {
-          console.log(q.userAnswers);
           return q.userAnswers[q.userAnswers.length - 1].correct;
         }
       }).length;
@@ -181,7 +181,7 @@ export default {
       this.history[this.index] = { ...currQ, right: false, wrong: true };
       this.history = [...this.history];
 
-      if (this.isModeNavigate) {
+      if (this.isModeNavigate || this.isModeSingleTry) {
         this.goToNextQuestion();
       }
     },

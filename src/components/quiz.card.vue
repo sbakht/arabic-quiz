@@ -1,7 +1,9 @@
 <template>
   <div class="p-6">
-    <div @click="$emit('goToPreviousQuestion')">Previous</div>
-    <div @click="$emit('goToNextQuestion')">Next</div>
+    <div v-if="canNavigate">
+      <div @click="$emit('goToPreviousQuestion')">Previous</div>
+      <div @click="$emit('goToNextQuestion')">Next</div>
+    </div>
     <div class="flex justify-between items-center">
       <p class="text-gray-600">{{ heading }}</p>
       <div class="flex flex-col items-end">
@@ -70,6 +72,7 @@ export default {
     "numWrong",
     "showScore",
     "selected",
+    "canNavigate",
   ],
   data() {
     return {
