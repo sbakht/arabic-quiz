@@ -40,37 +40,10 @@ export default {
       history: [],
     };
   },
-  computed: {
-    total() {
-      return this.questions.length;
-    },
-  },
+  computed: {},
   methods: {
     generate() {
       return generateArToEn({ count: 10 });
-    },
-    onAnswer(choice) {
-      this.history.push({
-        question: this.question,
-        choices: this.choices,
-        answered: choice,
-        answer: this.answer,
-      });
-    },
-    onWrong(choice) {
-      console.log("wrong");
-    },
-    onRight({ choice, timeout }) {
-      setTimeout(() => {
-        // if (this.index < this.total) {
-        //   this.index++;
-        // }else{
-        this.index++;
-        // this.questions = this.questions.concat(this.generate());
-
-        // }
-        this.question = this.buildQuestion({});
-      }, timeout);
     },
     buildQuestion({ index }) {
       const nextQuestion = generateArToEn({ count: 1 });

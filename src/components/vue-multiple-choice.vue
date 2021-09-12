@@ -66,9 +66,6 @@ export default {
     };
   },
   computed: {
-    total() {
-      return this.questions.length;
-    },
     isModeNavigate() {
       return this.mode === MODES.Navigate;
     },
