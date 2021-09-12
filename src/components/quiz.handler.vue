@@ -3,7 +3,6 @@
     <VueMultipleChoice
       :generateNextQuestion="buildQuestion"
       :heading="heading"
-      :showScore="false"
     ></VueMultipleChoice>
     <VueMultipleChoice
       :questions="questions"

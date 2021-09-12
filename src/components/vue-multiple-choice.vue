@@ -25,6 +25,12 @@
 <script>
 import QuizCard from "./quiz.card.vue";
 
+const MODES = {
+  Navigate: 1,
+  SingleTry: 2,
+  ForceRight: 3,
+};
+
 export default {
   inheritAttrs: false,
   components: {
@@ -51,6 +57,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    mode: {
+      type: String,
+      default: MODES.ForceRight,
+    },
   },
   data() {
     const index = 0;
@@ -64,22 +74,50 @@ export default {
       history: [],
       completed: false,
       questionNumber: 1,
-      numRight: 0,
-      numWrong: 0,
-      isIncorrectState: false,
     };
   },
   computed: {
     total() {
       return this.questions.length;
     },
+    isModeNavigate() {
+      return this.mode === MODES.Navigate;
+    },
+    isModeSingleTry() {
+      return this.mode === MODES.SingleTry;
+    },
+    isModeForceRight() {
+      return this.mode === MODES.ForceRight;
+    },
     chosenAnswer() {
       const activeQuestion = this.history[this.index];
-      console.log(this.history);
       if (!activeQuestion || !activeQuestion.userTempAnswer) {
         return {};
       }
       return activeQuestion.userTempAnswer;
+    },
+    isClean() {
+      const currQuestion = this.history[this.index];
+      return currQuestion.right == undefined && currQuestion.wrong == undefined;
+    },
+    numRight() {
+      return this.history.filter((q) => {
+        if (this.correctAnswerRequired) {
+          return (
+            q.userAnswers.filter((userAnswer) => !userAnswer.correct).length ===
+            0
+          );
+        }
+      }).length;
+    },
+    numWrong() {
+      return this.history.filter((q) => {
+        if (this.correctAnswerRequired) {
+          return (
+            q.userAnswers.filter((userAnswer) => !userAnswer.correct).length > 0
+          );
+        }
+      }).length;
     },
   },
   methods: {
@@ -115,35 +153,32 @@ export default {
         }
       }
     },
-    onAnswer(choice) {
+    onAnswer(choice, isRight) {
+      const currQ = this.history[this.index] || { userAnswers: [] };
       this.history[this.index] = {
+        ...currQ,
         questionInfo: this.question,
         userTempAnswer: choice,
+        userAnswers: [...currQ.userAnswers, { ...choice, correct: isRight }],
       };
     },
     onWrong(choice) {
-      if (!this.showScore) {
-        this.goToNextQuestion();
-        return;
-      }
+      // TODO improve with vue3
+      const currQ = this.history[this.index];
+      this.history[this.index] = { ...currQ, right: false, wrong: true };
+      this.history = [...this.history];
 
-      console.log("wrong");
-      this.numWrong += this.isIncorrectState ? 0 : 1;
-      this.isIncorrectState = true;
       if (this.correctAnswerRequired === false) {
-        this.isIncorrectState = false;
         this.goToNextQuestion();
       }
     },
     onRight({ choice, timeout }) {
-      setTimeout(() => {
-        if (!this.showScore) {
-          this.goToNextQuestion();
-          return;
-        }
+      // TODO improve with vue3
+      const currQ = this.history[this.index];
+      this.history[this.index] = { ...currQ, right: true, wrong: false };
+      this.history = [...this.history];
 
-        this.numRight += this.isIncorrectState ? 0 : 1;
-        this.isIncorrectState = false;
+      setTimeout(() => {
         this.goToNextQuestion();
       }, timeout);
     },

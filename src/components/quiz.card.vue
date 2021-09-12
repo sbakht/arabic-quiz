@@ -78,9 +78,9 @@ export default {
   },
   methods: {
     onAnswer(choice) {
-      this.$emit("answer", choice);
       if (this.isRight(choice)) {
         if (!this.answeredCorrectly) {
+          this.$emit("answer", choice, true);
           const timeout = 200;
           this.$emit("right", { choice, timeout });
           this.answeredCorrectly = true;
@@ -89,6 +89,7 @@ export default {
           }, timeout);
         }
       } else {
+        this.$emit("answer", choice, false);
         this.$emit("wrong", choice);
       }
     },
