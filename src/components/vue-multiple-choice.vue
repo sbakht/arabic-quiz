@@ -46,10 +46,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    isSkippable: {
-      type: Boolean,
-      default: true,
-    },
     mode: {
       type: String,
       default: MODES.ForceRight,
@@ -131,10 +127,6 @@ export default {
   },
   methods: {
     goToNextQuestion() {
-      if (!this.isSkippable) {
-        return;
-      }
-
       this.index++;
       this.questionNumber++;
 
