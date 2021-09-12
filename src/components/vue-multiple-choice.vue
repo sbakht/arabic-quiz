@@ -1,25 +1,32 @@
 <template>
-  <quiz-card
-    v-if="question && !completed"
-    v-bind="$attrs"
-    :question="question.question.text"
-    :choices="question.choices"
-    :answerId="question.answer"
-    :total="!generateNextQuestion && questions.length"
-    :index="questionNumber"
-    :numRight="numRight"
-    :numWrong="numWrong"
-    @answer="onAnswer"
-    @wrong="onWrong"
-    @right="onRight"
-  ></quiz-card>
-  <div v-else-if="completed">You have completed the quiz</div>
+  <div>
+    <quiz-card
+      v-if="question && !completed"
+      v-bind="$attrs"
+      :question="question.question.text"
+      :choices="question.choices"
+      :answerId="question.answer"
+      :total="!generateNextQuestion && questions.length"
+      :index="questionNumber"
+      :numRight="numRight"
+      :numWrong="numWrong"
+      :showScore="showScore"
+      :selected="chosenAnswer.id"
+      @answer="onAnswer"
+      @wrong="onWrong"
+      @right="onRight"
+      @goToNextQuestion="goToNextQuestion"
+      @goToPreviousQuestion="goToPreviousQuestion"
+    ></quiz-card>
+    <div v-else-if="completed">You have completed the quiz</div>
+  </div>
 </template>
 
 <script>
 import QuizCard from "./quiz.card.vue";
 
 export default {
+  inheritAttrs: false,
   components: {
     QuizCard,
   },
@@ -36,13 +43,23 @@ export default {
       type: Boolean,
       default: true,
     },
+    isSkippable: {
+      type: Boolean,
+      default: true,
+    },
+    showScore: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     const index = 0;
+    const question = this.generateNextQuestion
+      ? this.generateNextQuestion({})
+      : this.questions[index];
     return {
-      question: this.generateNextQuestion
-        ? this.generateNextQuestion({})
-        : this.questions[index],
+      question,
+      generatedHistory: this.generateNextQuestion ? [question] : [],
       index,
       history: [],
       completed: false,
@@ -56,13 +73,28 @@ export default {
     total() {
       return this.questions.length;
     },
+    chosenAnswer() {
+      const activeQuestion = this.history[this.index];
+      console.log(this.history);
+      if (!activeQuestion || !activeQuestion.userTempAnswer) {
+        return {};
+      }
+      return activeQuestion.userTempAnswer;
+    },
   },
   methods: {
     goToNextQuestion() {
+      if (!this.isSkippable) {
+        return;
+      }
+
+      this.index++;
+      this.questionNumber++;
+
       if (this.generateNextQuestion) {
         this.question = this.generateNextQuestion({});
+        this.generatedHistory.push(this.question);
       } else {
-        this.index++;
         if (this.index >= this.questions.length) {
           this.completed = true;
           this.question = null;
@@ -70,17 +102,31 @@ export default {
           this.question = this.questions[this.index];
         }
       }
-      this.questionNumber++;
+    },
+    goToPreviousQuestion() {
+      if (this.index > 0) {
+        this.index--;
+        this.questionNumber--;
+
+        if (this.generateNextQuestion) {
+          this.question = this.generatedHistory[this.index];
+        } else {
+          this.question = this.questions[this.index];
+        }
+      }
     },
     onAnswer(choice) {
-      this.history.push({
-        question: this.question,
-        choices: this.choices,
-        answered: choice,
-        answer: this.answer,
-      });
+      this.history[this.index] = {
+        questionInfo: this.question,
+        userTempAnswer: choice,
+      };
     },
     onWrong(choice) {
+      if (!this.showScore) {
+        this.goToNextQuestion();
+        return;
+      }
+
       console.log("wrong");
       this.numWrong += this.isIncorrectState ? 0 : 1;
       this.isIncorrectState = true;
@@ -91,6 +137,11 @@ export default {
     },
     onRight({ choice, timeout }) {
       setTimeout(() => {
+        if (!this.showScore) {
+          this.goToNextQuestion();
+          return;
+        }
+
         this.numRight += this.isIncorrectState ? 0 : 1;
         this.isIncorrectState = false;
         this.goToNextQuestion();

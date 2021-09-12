@@ -1,5 +1,7 @@
 <template>
   <div class="p-6">
+    <div @click="$emit('goToPreviousQuestion')">Previous</div>
+    <div @click="$emit('goToNextQuestion')">Next</div>
     <div class="flex justify-between items-center">
       <p class="text-gray-600">{{ heading }}</p>
       <div class="flex flex-col items-end">
@@ -7,10 +9,10 @@
           {{ index }}/{{ total }}
         </p>
         <p class="text-gray-600 font-bold" v-else># {{ index }}</p>
-        <p class="text-green-600">
+        <p v-if="showScore" class="text-green-600">
           Correct: <span class="font-bold">{{ numRight }}</span>
         </p>
-        <p class="text-red-600">
+        <p v-if="showScore" class="text-red-600">
           Incorrect: <span class="font-bold">{{ numWrong }}</span>
         </p>
       </div>
@@ -39,6 +41,7 @@
           focus-within:ring-offset-2
           focus-within:ring-indigo-500
         "
+        :class="{ 'bg-green-400': selected === choice.id }"
         v-for="(choice, i) in choices"
         :key="choice.id"
       >
@@ -65,6 +68,8 @@ export default {
     "answerId",
     "numRight",
     "numWrong",
+    "showScore",
+    "selected",
   ],
   data() {
     return {
