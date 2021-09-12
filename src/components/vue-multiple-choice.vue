@@ -10,7 +10,7 @@
       :index="questionNumber"
       :numRight="numRight"
       :numWrong="numWrong"
-      :showScore="showScore"
+      :showScore="!isModeNavigate"
       :selected="chosenAnswer.id"
       :canNavigate="isModeNavigate"
       @answer="onAnswer"
@@ -47,10 +47,6 @@ export default {
       default: () => [],
     },
     isSkippable: {
-      type: Boolean,
-      default: true,
-    },
-    showScore: {
       type: Boolean,
       default: true,
     },
