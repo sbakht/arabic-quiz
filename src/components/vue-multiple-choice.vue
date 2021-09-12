@@ -104,6 +104,15 @@ export default {
             0
           );
         }
+
+        if (this.isModeSingleTry) {
+          return q.userAnswers[0].correct;
+        }
+
+        if (this.isModeNavigate) {
+          console.log(q.userAnswers);
+          return q.userAnswers[q.userAnswers.length - 1].correct;
+        }
       }).length;
     },
     numWrong() {
@@ -112,6 +121,14 @@ export default {
           return (
             q.userAnswers.filter((userAnswer) => !userAnswer.correct).length > 0
           );
+        }
+
+        if (this.isModeSingleTry) {
+          return !q.userAnswers[0].correct;
+        }
+
+        if (this.isModeNavigate) {
+          return !q.userAnswers[q.userAnswers.length - 1].correct;
         }
       }).length;
     },
@@ -164,7 +181,7 @@ export default {
       this.history[this.index] = { ...currQ, right: false, wrong: true };
       this.history = [...this.history];
 
-      if (this.isModeForceRight === false) {
+      if (this.isModeNavigate) {
         this.goToNextQuestion();
       }
     },

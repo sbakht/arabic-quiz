@@ -1,13 +1,22 @@
 <template>
   <div>
-    <VueMultipleChoice
-      :generateNextQuestion="buildQuestion"
-      :heading="heading"
-    ></VueMultipleChoice>
+    <p>Navigate</p>
     <VueMultipleChoice
       :questions="questions"
       :heading="heading"
-      :mode="Navigates"
+      mode="Navigate"
+    ></VueMultipleChoice>
+    <p>Single Try</p>
+    <VueMultipleChoice
+      :generateNextQuestion="buildQuestion"
+      :heading="heading"
+      mode="SingleTry"
+    ></VueMultipleChoice>
+    <p>Force Right</p>
+    <VueMultipleChoice
+      :generateNextQuestion="buildQuestion"
+      :heading="heading"
+      mode="ForceRight"
     ></VueMultipleChoice>
   </div>
 </template>
